@@ -1,0 +1,15 @@
+xml/
+json/
+log/
+.idea/
+*.pyc
+__pycache__/
+venv/
+validation_set_cache/
+.last_setup_state
+incoming/
+platform.env
+.vscode
+.cache
+.env
+.mypy_cache/
