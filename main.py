@@ -1,11 +1,8 @@
 import os
 import discord
 from discord.ext.commands import Bot
-
-from locale import setlocale, LC_ALL
 from dotenv import load_dotenv
 
-setlocale(LC_ALL, 'pt_BR.utf-8')
 load_dotenv()
 
 token = os.getenv('TOKEN')
