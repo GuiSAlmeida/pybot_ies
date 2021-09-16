@@ -1,23 +1,45 @@
-import discord
 import os
+import discord
+from discord.ext.commands import Bot
+
+from locale import setlocale, LC_ALL
 from dotenv import load_dotenv
 
+setlocale(LC_ALL, 'pt_BR.utf-8')
 load_dotenv()
-client = discord.Client()
-
-
-@client.event
-async def on_ready():
-    print(f'We have logged in as {client.user}')
-
-
-@client.event
-async def on_message(message):
-    if message.author == client.user:
-        return
-
-    if message.content.startswith('Patrick'):
-        await message.channel.send('Oi Pessoal! Espero encontrar vocês bem!')
 
 token = os.getenv('TOKEN')
-client.run(token)
+matricula = os.getenv('MATRICULA')
+password = os.getenv('SENHA')
+
+bot = Bot('!')
+
+
+@bot.event
+async def on_ready():
+    print(f'We have logged in as {bot.user}')
+    await bot.change_presence(
+        status=discord.Status.idle,
+        activity=discord.Game('Assembly no FreeBSD')
+    )
+
+
+@bot.event
+async def on_message(message):
+    if message.author == bot.user:
+        return
+
+    if 'Patrick' in message.content:
+        await message.channel.send(f'Oi {message.author.name}, olá pessoal '
+                                   f'espero encontrar vocês bem!')
+
+    await bot.process_commands(message)
+
+
+@bot.command(name='freebsd')
+async def send_hello(ctx):
+
+    await ctx.send('Eu amo!')
+
+
+bot.run(token)
