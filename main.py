@@ -46,7 +46,7 @@ async def send_hello(ctx):
 
 @tasks.loop(minutes=1)
 async def current_time():
-    channel = bot.get_channel(877701880472547328)
+    channel = bot.get_channel(877689818094633070)
 
     now = datetime.now()
     print(now)
