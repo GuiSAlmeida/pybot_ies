@@ -8,7 +8,7 @@ import discord
 from discord.ext import commands, tasks
 from dotenv import load_dotenv
 
-setlocale(LC_ALL, 'pt_BR.utf-8')
+setlocale(LC_ALL, 'pt_BR.UTF-8')
 load_dotenv()
 
 token = os.getenv('TOKEN')
@@ -55,7 +55,7 @@ async def current_time():
     now_time = now.strftime('%H:%M:00')
     now_date = now.strftime('%Y-%m-%d')
 
-    if '19:10:00' in now_time or '21:23:00' in now_time:
+    if '19:10:00' in now_time or '22:23:00' in now_time:
 
         # Login na api para pegar token
         url_login = f'https://www.ies.edu.br/includes/head.asp' \
