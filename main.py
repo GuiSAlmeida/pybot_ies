@@ -52,7 +52,7 @@ async def current_time():
     now_time = now.strftime('%H:%M:00')
     now_date = now.strftime('%Y-%m-%d')
 
-    if '19:10:00' in now_time or '20:45:00' in now_time:
+    if '19:10:00' in now_time or '21:15:00' in now_time:
 
         # Login na api para pegar token
         url_login = f'https://www.ies.edu.br/includes/head.asp' \
@@ -70,7 +70,7 @@ async def current_time():
         classes = json.loads(data_classes.text)
 
         for cls in classes:
-            if now_date in cls['DataAula'] and now_time in cls['DataAula']:
+            if now_date in cls['DataAula'] and '20:45:00' in cls['DataAula']:
                 await channel.send(json.dumps(cls, sort_keys=False, indent=4))
 
 
