@@ -1,7 +1,7 @@
 import os
 import requests
 import json
-from datetime import datetime
+from datetime import datetime, timedelta
 from locale import setlocale, LC_TIME
 
 import discord
@@ -16,6 +16,29 @@ matricula = os.getenv('MATRICULA')
 password = os.getenv('SENHA')
 
 bot = commands.Bot('!')
+
+
+def create_embed(cls):
+    embed = discord.Embed(
+        title='Aula começando pessoal, não se atrasem!',
+        description='Seguem dados para acesso ao link da aula.',
+        color=0x065aa9,
+    )
+    embed.set_author(
+        name=bot.user.name,
+        icon_url=bot.user.avatar_url
+    )
+    embed.add_field(name='Disciplina', value=cls['NomeDisciplina'])
+    embed.add_field(name='Professor', value=cls['Professor'])
+
+    if cls['Link']:
+        embed.add_field(name='Link', value=cls['Link'], inline=False)
+
+    embed.set_thumbnail(url='https://www.ies.edu.br/assets/img/logo.png')
+    embed.set_footer(
+        text='Para mais infos das aulas acesse: https://www.ies.edu.br/')
+
+    return embed
 
 
 @bot.event
@@ -42,7 +65,6 @@ async def on_message(message):
 
 @bot.command(name='freebsd')
 async def send_hello(ctx):
-
     await ctx.send('Eu amo!')
 
 
@@ -50,14 +72,14 @@ async def send_hello(ctx):
 async def current_time():
     channel = bot.get_channel(877701880472547328)
 
-    now = datetime.now()
+    now = datetime.now() - timedelta(minutes=3*60)
     print(now)
     now_time = now.strftime('%H:%M:00')
     now_date = now.strftime('%Y-%m-%d')
 
-    if '22:10:00' in now_time or '23:45:00' in now_time:
+    if '19:10:00' in now_time or '20:45:00' in now_time:
 
-        # Login na api para pegar token
+        """ Login na api para pegar token """
         url_login = f'https://www.ies.edu.br/includes/head.asp' \
             f'?action=logar&matricula={matricula}&senha={password}'
 
@@ -65,7 +87,7 @@ async def current_time():
         data_login = json.loads(login.text)
         user_token = data_login['token']
 
-        # Bate na api para pegar dados das aulas
+        """ Bate na api para pegar dados das aulas """
         url_classes = f'https://suafaculdade.com.br' \
             f'/api/servicos/Aluno/ObterAulaOnline/{user_token}'
 
@@ -73,8 +95,9 @@ async def current_time():
         classes = json.loads(data_classes.text)
 
         for cls in classes:
-            if now_date in cls['DataAula']:
-                await channel.send(json.dumps(cls, sort_keys=False, indent=4))
+            if now_date in cls['DataAula'] and now_time in cls['DataAula']:
+                embed = create_embed(cls)
+                await channel.send(embed=embed)
 
 
 bot.run(token)
