@@ -94,7 +94,7 @@ async def current_time():
     now_time = now.strftime('%H:%M:00')
     now_date = now.strftime('%Y-%m-%d')
 
-    if '19:10:00' in now_time or '21:55:00' in now_time:
+    if '19:10:00' in now_time or '21:02:00' in now_time:
 
         """ Login na api para pegar token """
         url_login = f'https://www.ies.edu.br/includes/head.asp' \
