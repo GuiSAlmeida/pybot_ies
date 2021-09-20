@@ -63,6 +63,23 @@ async def on_message(message):
     await bot.process_commands(message)
 
 
+@bot.event
+async def on_member_join(member):
+    channel = bot.get_channel(877701880472547328)
+    embed = discord.Embed(
+        title='Bem vindo!',
+        description=f'{member.name} entrou pra turma da IES.',
+        color=0x065aa9,
+    )
+    embed.set_author(
+        name=bot.user.name,
+        icon_url=bot.user.avatar_url
+    )
+    embed.set_thumbnail(url=member.avatar_url)
+
+    await channel.send(embed=embed)
+
+
 @bot.command(name='freebsd')
 async def send_hello(ctx):
     await ctx.send('Eu amo!')
@@ -70,14 +87,14 @@ async def send_hello(ctx):
 
 @tasks.loop(minutes=1)
 async def current_time():
-    channel = bot.get_channel(877701880472547328)
+    channel = bot.get_channel(889644549192974336)
 
     now = datetime.now() - timedelta(minutes=3*60)
     print(now)
     now_time = now.strftime('%H:%M:00')
     now_date = now.strftime('%Y-%m-%d')
 
-    if '19:10:00' in now_time or '20:45:00' in now_time:
+    if '19:10:00' in now_time or '21:55:00' in now_time:
 
         """ Login na api para pegar token """
         url_login = f'https://www.ies.edu.br/includes/head.asp' \
@@ -95,7 +112,10 @@ async def current_time():
         classes = json.loads(data_classes.text)
 
         for cls in classes:
-            if now_date in cls['DataAula'] and now_time in cls['DataAula']:
+            if not isinstance(cls, dict):
+                cls = dict(cls)
+
+            if now_date in cls['DataAula'] and '20:45:00' in cls['DataAula']:
                 embed = create_embed(cls)
                 await channel.send(embed=embed)
 
