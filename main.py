@@ -1,7 +1,6 @@
 import os
 import requests
 import json
-import ast
 from datetime import datetime, timedelta
 from locale import setlocale, LC_TIME
 
@@ -45,7 +44,7 @@ def create_embed(cls):
 @bot.event
 async def on_ready():
     print(f'We have logged in as {bot.user}')
-    current_time.start()
+    # current_time.start()
     await bot.change_presence(
         status=discord.Status.idle,
         activity=discord.Game('Assembly no FreeBSD')
@@ -86,39 +85,66 @@ async def send_hello(ctx):
     await ctx.send('Eu amo!')
 
 
-@tasks.loop(minutes=1)
-async def current_time():
-    channel = bot.get_channel(889644549192974336)
-
-    now = datetime.now() - timedelta(minutes=3*60)
+@bot.command(name='aulas')
+async def send_embed(ctx):
+    now = datetime.now()
     print(now)
-    now_time = now.strftime('%H:%M:00')
     now_date = now.strftime('%Y-%m-%d')
 
-    if '19:10:00' in now_time or '21:19:00' in now_time:
+    """ Login na api para pegar token """
+    url_login = f'https://www.ies.edu.br/includes/head.asp' \
+        f'?action=logar&matricula={matricula}&senha={password}'
 
-        """ Login na api para pegar token """
-        url_login = f'https://www.ies.edu.br/includes/head.asp' \
-            f'?action=logar&matricula={matricula}&senha={password}'
+    login = requests.get(url_login)
+    data_login = json.loads(login.text)
+    user_token = data_login['token']
 
-        login = requests.get(url_login)
-        data_login = json.loads(login.text)
-        user_token = data_login['token']
+    """ Bate na api para pegar dados das aulas """
+    url_classes = f'https://suafaculdade.com.br' \
+        f'/api/servicos/Aluno/ObterAulaOnline/{user_token}'
 
-        """ Bate na api para pegar dados das aulas """
-        url_classes = f'https://suafaculdade.com.br' \
-            f'/api/servicos/Aluno/ObterAulaOnline/{user_token}'
+    data_classes = requests.get(url_classes)
+    classes = json.loads(data_classes.text)
 
-        data_classes = requests.get(url_classes)
-        classes = json.loads(data_classes.text)
+    for cls in classes:
+        if now_date in cls['DataAula']:
+            embed = create_embed(cls)
+            await ctx.send(embed=embed)
 
-        for cls in classes:
-            if not isinstance(cls, dict):
-                cls = json.dumps(cls)
 
-            if now_date in cls['DataAula'] and '20:45:00' in cls['DataAula']:
-                embed = create_embed(cls)
-                await channel.send(embed=embed)
+# @tasks.loop(minutes=1)
+# async def current_time():
+#     channel = bot.get_channel(889644549192974336)
+
+#     now = datetime.now() - timedelta(minutes=3*60)
+#     print(now)
+#     now_time = now.strftime('%H:%M:00')
+#     now_date = now.strftime('%Y-%m-%d')
+
+#     if '19:30:00' in now_time or '20:45:00' in now_time:
+
+#         """ Login na api para pegar token """
+#         url_login = f'https://www.ies.edu.br/includes/head.asp' \
+#             f'?action=logar&matricula={matricula}&senha={password}'
+
+#         login = requests.get(url_login)
+#         data_login = json.loads(login.text)
+#         user_token = data_login['token']
+
+#         """ Bate na api para pegar dados das aulas """
+#         url_classes = f'https://suafaculdade.com.br' \
+#             f'/api/servicos/Aluno/ObterAulaOnline/{user_token}'
+
+#         data_classes = requests.get(url_classes)
+#         classes = json.loads(data_classes.text)
+
+#         for cls in classes:
+#             if not isinstance(cls, dict):
+#                 cls = json.dumps(cls)
+
+#             if now_date in cls['DataAula'] and '19:30:00' in cls['DataAula']:
+#                 embed = create_embed(cls)
+#                 await channel.send(embed=embed)
 
 
 bot.run(token)
