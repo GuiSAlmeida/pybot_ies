@@ -1,6 +1,7 @@
 import os
 import requests
 import json
+import ast
 from datetime import datetime, timedelta
 from locale import setlocale, LC_TIME
 
@@ -94,7 +95,7 @@ async def current_time():
     now_time = now.strftime('%H:%M:00')
     now_date = now.strftime('%Y-%m-%d')
 
-    if '19:10:00' in now_time or '21:10:00' in now_time:
+    if '19:10:00' in now_time or '21:16:00' in now_time:
 
         """ Login na api para pegar token """
         url_login = f'https://www.ies.edu.br/includes/head.asp' \
@@ -113,8 +114,7 @@ async def current_time():
 
         for cls in classes:
             if not isinstance(cls, dict):
-                print(cls)
-                print(type(cls))
+                cls = ast.literal_eval(cls)
 
             if now_date in cls['DataAula'] and '20:45:00' in cls['DataAula']:
                 embed = create_embed(cls)
