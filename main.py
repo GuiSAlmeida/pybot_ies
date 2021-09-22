@@ -107,8 +107,6 @@ async def send_embed(ctx):
     classes = json.loads(data_classes.text)
 
     for cls in classes:
-        print(cls)
-        cls = json.loads(cls)
         if now_date in cls['DataAula']:
             # embed = create_embed(test)
             await ctx.send(cls)
