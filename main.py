@@ -108,7 +108,12 @@ async def send_embed(ctx):
 
     for cls in classes:
         if now_date in cls['DataAula']:
-            embed = create_embed(cls)
+            test = {
+                "Link": cls['Link'],
+                "NomeDisciplina": cls['NomeDisciplina'],
+                "Professor": cls['Professor']
+            }
+            embed = create_embed(test)
             await ctx.send(embed=embed)
 
 
