@@ -2,13 +2,11 @@ import os
 import requests
 import json
 from datetime import datetime, timedelta
-from locale import setlocale, LC_TIME
 
 import discord
 from discord.ext import commands, tasks
 from dotenv import load_dotenv
 
-setlocale(LC_TIME, 'pt_BR.UTF-8')
 load_dotenv()
 
 token = os.getenv('TOKEN')
@@ -16,6 +14,23 @@ matricula = os.getenv('MATRICULA')
 password = os.getenv('SENHA')
 
 bot = commands.Bot('!')
+
+
+def get_classes():
+    url_login = f'https://www.ies.edu.br/includes/head.asp' \
+        f'?action=logar&matricula={matricula}&senha={password}'
+
+    login = requests.get(url_login)
+    data_login = json.loads(login.text)
+    user_token = data_login['token']
+
+    url_classes = f'https://suafaculdade.com.br' \
+        f'/api/servicos/Aluno/ObterAulaOnline/{user_token}'
+
+    data_classes = requests.get(url_classes)
+    classes = json.loads(data_classes.text)
+
+    return classes
 
 
 def create_embed(cls):
@@ -87,26 +102,10 @@ async def send_hello(ctx):
 
 @bot.command(name='aulas')
 async def send_embed(ctx):
-    now = datetime.now()
-    print(now)
-    now_date = now.strftime('%Y-%m-%d')
-
-    """ Login na api para pegar token """
-    url_login = f'https://www.ies.edu.br/includes/head.asp' \
-        f'?action=logar&matricula={matricula}&senha={password}'
-
-    login = requests.get(url_login)
-    data_login = json.loads(login.text)
-    user_token = data_login['token']
-
-    """ Bate na api para pegar dados das aulas """
-    url_classes = f'https://suafaculdade.com.br' \
-        f'/api/servicos/Aluno/ObterAulaOnline/{user_token}'
-
-    data_classes = requests.get(url_classes)
-    classes = json.loads(data_classes.text)
-    
-    await ctx.send(classes[0])
+    classes = get_classes()
+    print(type(classes))
+    # classes = json.dumps(classes)
+    # await ctx.send(classes[0])
 
 
 # @tasks.loop(minutes=1)
