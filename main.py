@@ -104,8 +104,9 @@ async def send_hello(ctx):
 async def send_embed(ctx):
     classes = get_classes()
     classes = list(classes)
+    print(classes)
     for cls in classes:
-        print(type(cls))
+        print(cls)
         if not isinstance(cls, dict):
             cls = dict(cls)
 
