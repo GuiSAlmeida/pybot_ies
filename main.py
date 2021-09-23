@@ -106,7 +106,7 @@ async def send_embed(ctx):
     data_classes = requests.get(url_classes)
     classes = json.loads(data_classes.text)
     
-    await ctx.send(classes)
+    await ctx.send(classes[0])
 
 
 # @tasks.loop(minutes=1)
