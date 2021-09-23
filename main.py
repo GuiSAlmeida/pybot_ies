@@ -105,11 +105,12 @@ async def send_embed(ctx):
 
     data_classes = requests.get(url_classes)
     classes = json.loads(data_classes.text)
-
+    print(type(classes))
+    classes = list(classes)
     for cls in classes:
-        if now_date in cls['DataAula']:
-            # embed = create_embed(test)
-            await ctx.send(cls)
+        # if now_date in cls['DataAula']:
+        # embed = create_embed(test)
+        await ctx.send(cls)
 
 
 # @tasks.loop(minutes=1)
