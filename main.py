@@ -103,6 +103,7 @@ async def send_hello(ctx):
 @bot.command(name='aulas')
 async def send_embed(ctx):
     classes = get_classes()
+    classes = list(classes)
     print(type(classes))
     # classes = json.dumps(classes)
     # await ctx.send(classes[0])
