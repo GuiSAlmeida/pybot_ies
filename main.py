@@ -107,7 +107,7 @@ async def send_embed(ctx):
     for cls in classes:
         print(type(cls))
         if not isinstance(cls, dict):
-            cls = json.dumps(cls)
+            cls = dict(cls)
 
         embed = create_embed(cls)
         await ctx.send(embed=embed)
