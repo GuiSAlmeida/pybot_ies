@@ -104,9 +104,13 @@ async def send_hello(ctx):
 async def send_embed(ctx):
     classes = get_classes()
     classes = list(classes)
-    print(type(classes))
-    # classes = json.dumps(classes)
-    # await ctx.send(classes[0])
+    for cls in classes:
+        print(type(cls))
+        if not isinstance(cls, dict):
+            cls = json.dumps(cls)
+
+        embed = create_embed(cls)
+        await ctx.send(embed=embed)
 
 
 # @tasks.loop(minutes=1)
