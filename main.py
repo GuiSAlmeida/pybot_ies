@@ -23,11 +23,13 @@ def get_classes():
     login = requests.get(url_login)
     data_login = json.loads(login.text)
     user_token = data_login['token']
+    print(user_token)
 
     url_classes = f'https://suafaculdade.com.br' \
         f'/api/servicos/Aluno/ObterAulaOnline/{user_token}'
 
     data_classes = requests.get(url_classes)
+    print(data_classes)
     classes = json.loads(data_classes.text)
 
     return classes
@@ -125,20 +127,7 @@ async def send_embed(ctx):
 
 #     if '19:30:00' in now_time or '20:45:00' in now_time:
 
-#         """ Login na api para pegar token """
-#         url_login = f'https://www.ies.edu.br/includes/head.asp' \
-#             f'?action=logar&matricula={matricula}&senha={password}'
-
-#         login = requests.get(url_login)
-#         data_login = json.loads(login.text)
-#         user_token = data_login['token']
-
-#         """ Bate na api para pegar dados das aulas """
-#         url_classes = f'https://suafaculdade.com.br' \
-#             f'/api/servicos/Aluno/ObterAulaOnline/{user_token}'
-
-#         data_classes = requests.get(url_classes)
-#         classes = json.loads(data_classes.text)
+#         classes = get_classes()
 
 #         for cls in classes:
 #             if not isinstance(cls, dict):
