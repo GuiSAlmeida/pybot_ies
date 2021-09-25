@@ -1,6 +1,7 @@
 import os
 from utils import get_classes, create_embed
 from datetime import datetime, timedelta
+import discord
 from discord.ext import commands, tasks
 from dotenv import load_dotenv
 
