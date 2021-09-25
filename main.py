@@ -1,61 +1,13 @@
 import os
-import requests
-import json
+from utils import get_classes, create_embed
 from datetime import datetime, timedelta
-
-import discord
 from discord.ext import commands, tasks
 from dotenv import load_dotenv
 
 load_dotenv()
 
 token = os.getenv('TOKEN')
-matricula = os.getenv('MATRICULA')
-password = os.getenv('SENHA')
-
 bot = commands.Bot('!')
-
-
-def get_classes():
-    url_login = f'https://www.ies.edu.br/includes/head.asp' \
-        f'?action=logar&matricula={matricula}&senha={password}'
-
-    login = requests.get(url_login)
-    data_login = json.loads(login.text)
-    user_token = data_login['token']
-    print(user_token)
-
-    url_classes = f'https://suafaculdade.com.br' \
-        f'/api/servicos/Aluno/ObterAulaOnline/{user_token}'
-
-    data_classes = requests.get(url_classes)
-    print(data_classes)
-    classes = json.loads(data_classes.text)
-
-    return classes
-
-
-def create_embed(cls):
-    embed = discord.Embed(
-        title='Aula começando pessoal, não se atrasem!',
-        description='Seguem dados para acesso ao link da aula.',
-        color=0x065aa9,
-    )
-    embed.set_author(
-        name=bot.user.name,
-        icon_url=bot.user.avatar_url
-    )
-    embed.add_field(name='Disciplina', value=cls['NomeDisciplina'])
-    embed.add_field(name='Professor', value=cls['Professor'])
-
-    if cls['Link']:
-        embed.add_field(name='Link', value=cls['Link'], inline=False)
-
-    embed.set_thumbnail(url='https://www.ies.edu.br/assets/img/logo.png')
-    embed.set_footer(
-        text='Para mais infos das aulas acesse: https://www.ies.edu.br/')
-
-    return embed
 
 
 @bot.event
@@ -102,40 +54,22 @@ async def send_hello(ctx):
     await ctx.send('Eu amo!')
 
 
-@bot.command(name='aulas')
-async def send_embed(ctx):
-    classes = get_classes()
-    classes = list(classes)
-    print(classes)
-    for cls in classes:
-        print(cls)
-        if not isinstance(cls, dict):
-            cls = dict(cls)
+@tasks.loop(minutes=1)
+async def current_time():
+    channel = bot.get_channel(889644549192974336)
 
-        embed = create_embed(cls)
-        await ctx.send(embed=embed)
+    now = datetime.now() - timedelta(minutes=3*60)
+    print(now)
+    now_time = now.strftime('%H:%M:00')
+    now_date = now.strftime('%Y-%m-%d')
 
+    if '19:30:00' in now_time or '20:45:00' in now_time:
+        classes = get_classes()
 
-# @tasks.loop(minutes=1)
-# async def current_time():
-#     channel = bot.get_channel(889644549192974336)
-
-#     now = datetime.now() - timedelta(minutes=3*60)
-#     print(now)
-#     now_time = now.strftime('%H:%M:00')
-#     now_date = now.strftime('%Y-%m-%d')
-
-#     if '19:30:00' in now_time or '20:45:00' in now_time:
-
-#         classes = get_classes()
-
-#         for cls in classes:
-#             if not isinstance(cls, dict):
-#                 cls = json.dumps(cls)
-
-#             if now_date in cls['DataAula'] and now_time in cls['DataAula']:
-#                 embed = create_embed(cls)
-#                 await channel.send(embed=embed)
+        for cls in classes:
+            if now_date in cls['DataAula'] and now_time in cls['DataAula']:
+                embed = create_embed(cls, bot)
+                await channel.send(embed=embed)
 
 
 bot.run(token)
