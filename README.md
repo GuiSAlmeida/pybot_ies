@@ -13,6 +13,11 @@ SENHA=<password>
 Make you sure have [**docker**](https://www.docker.com/) instaled.
 
 ## Usage
+You can download a image for this aplication:
+```sh
+docker push guisalmeida/pybot_ies:latest
+```
+
 After modifying the files, run the following commands to build and up the container with the application:
 ```sh
 # build image
