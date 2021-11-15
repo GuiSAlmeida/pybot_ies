@@ -11,22 +11,26 @@ password = os.getenv('SENHA')
 
 
 def get_classes():
-    url_login = f'https://www.ies.edu.br/includes/head.asp' \
-        f'?action=logar&matricula={matricula}&senha={password}'
+    try:
+        url_login = f'https://www.ies.edu.br/includes/head.asp' \
+            f'?action=logar&matricula={matricula}&senha={password}'
 
-    login = requests.get(url_login)
-    data_login = json.loads(login.text)
-    user_token = data_login['token']
-    print(user_token)
+        login = requests.get(url_login)
+        data_login = json.loads(login.text)
+        user_token = data_login['token']
+        print(user_token)
 
-    url_classes = f'https://suafaculdade.com.br' \
-        f'/api/servicos/Aluno/ObterAulaOnline/{user_token}'
+        url_classes = f'https://suafaculdade.com.br' \
+            f'/api/servicos/Aluno/ObterAulaOnline/{user_token}'
 
-    data_classes = requests.get(url_classes)
-    print(data_classes)
-    classes = json.loads(data_classes.text)
+        data_classes = requests.get(url_classes)
+        print(data_classes)
+        classes = json.loads(data_classes.text)
 
-    return classes
+        return classes
+    except Exception as e:
+        print(f'Error on get_classes: {e}')
+        return []
 
 
 def create_embed(cls, bot):
@@ -50,3 +54,7 @@ def create_embed(cls, bot):
         text='Para mais infos das aulas acesse: https://www.ies.edu.br/')
 
     return embed
+
+
+if __name__ == '__main__':
+    print(json.dumps(get_classes(), indent=4))

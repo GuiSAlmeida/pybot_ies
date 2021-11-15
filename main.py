@@ -14,7 +14,9 @@ bot = commands.Bot('!')
 @bot.event
 async def on_ready():
     print(f'We have logged in as {bot.user}')
-    # current_time.start()
+
+    current_time.start()
+
     await bot.change_presence(
         status=discord.Status.idle,
         activity=discord.Game('Assembly no FreeBSD')
@@ -59,8 +61,12 @@ async def send_hello(ctx):
 async def current_time():
     channel = bot.get_channel(889644549192974336)
 
+    """
+    Timedelta subtract 3 hours from current time
+    because heroku server is from another time zone.
+    """
     now = datetime.now() - timedelta(minutes=3*60)
-    print(now)
+
     now_time = now.strftime('%H:%M:00')
     now_date = now.strftime('%Y-%m-%d')
 
