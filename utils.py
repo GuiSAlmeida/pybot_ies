@@ -12,17 +12,15 @@ password = os.getenv('SENHA')
 
 def get_classes():
     try:
-        # url_login = f'https://www.ies.edu.br/includes/head.asp' \
-        #     f'?action=logar&matricula={matricula}&senha={password}'
+        url_login = f'https://www.ies.edu.br/includes/head.asp' \
+            f'?action=logar&matricula={matricula}&senha={password}'
 
-        # login = requests.get(url_login)
-        # data_login = json.loads(login.text)
-        # user_token = data_login['token']
-        # print(user_token)
+        login = requests.get(url_login)
+        data_login = json.loads(login.text)
+        user_token = data_login['token']
 
-        url_classes = 'https://suafaculdade.com.br' \
-            '/api/servicos/Aluno/ObterAulaOnline/' \
-            '909f8e33eb0742359e85d59c2a528339'
+        url_classes = f'https://suafaculdade.com.br' \
+            f'/api/servicos/Aluno/ObterAulaOnline/{user_token}'
 
         data_classes = requests.get(url_classes)
         print(data_classes)

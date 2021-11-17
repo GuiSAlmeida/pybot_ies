@@ -67,7 +67,7 @@ async def current_time():
     """
     now = datetime.now()
     print(now)
-    now_time = '19:10:00'
+    now_time = now.strftime('%H:%M:00')
     now_date = now.strftime('%Y-%m-%d')
 
     if '19:10:00' in now_time or '20:45:00' in now_time:
