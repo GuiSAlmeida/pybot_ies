@@ -1,6 +1,6 @@
 import os
 from utils import get_classes, create_embed
-from datetime import datetime, timedelta
+from datetime import datetime
 import discord
 from discord.ext import commands, tasks
 from dotenv import load_dotenv
@@ -65,8 +65,8 @@ async def current_time():
     Timedelta subtract 3 hours from current time
     because heroku server is from another time zone.
     """
-    now = datetime.now() - timedelta(minutes=3*60)
-
+    now = datetime.now()
+    print(now)
     now_time = now.strftime('%H:%M:00')
     now_date = now.strftime('%Y-%m-%d')
 
