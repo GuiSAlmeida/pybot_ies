@@ -70,7 +70,7 @@ async def current_time():
     now_time = now.strftime('%H:%M:00')
     now_date = now.strftime('%Y-%m-%d')
 
-    if '19:10:00' in now_time or '21:35:00' in now_time:
+    if '19:10:00' in now_time or '21:45:00' in now_time:
         classes = get_classes()
 
         for cls in classes:
