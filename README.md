@@ -24,7 +24,11 @@ After modifying the files, run the following commands to build and up the contai
 docker build -t guisalmeida/pybot_ies:latest .
 
 # run in detach
-docker run -d --name pybot_ies guisalmeida/pybot_ies:latest
+docker run -d \
+-e TOKEN='token-discord' \
+-e MATRICULA='matricula-ies' \
+-e SENHA='senha-ies' \
+--name pybot_ies guisalmeida/pybot_ies:latest
 
 # run test to request IES api
 docker run -it --rm --name pybot_ies guisalmeida/pybot_ies:latest python utils.py

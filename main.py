@@ -1,6 +1,6 @@
 import os
 from utils import get_classes, create_embed
-from datetime import datetime
+from datetime import datetime, timedelta
 import discord
 from discord.ext import commands, tasks
 from dotenv import load_dotenv
@@ -59,22 +59,22 @@ async def send_hello(ctx):
 
 @tasks.loop(minutes=1)
 async def current_time():
-    channel = bot.get_channel(889644549192974336)
+    channel = bot.get_channel(877701880472547328)
 
     """
     Timedelta subtract 3 hours from current time
     because heroku server is from another time zone.
     """
-    now = datetime.now()
+    now = datetime.now() - timedelta(minutes=3*60)
     print(now)
     now_time = now.strftime('%H:%M:00')
     now_date = now.strftime('%Y-%m-%d')
 
-    if '19:10:00' in now_time or '20:45:00' in now_time:
+    if '19:10:00' in now_time or '21:35:00' in now_time:
         classes = get_classes()
 
         for cls in classes:
-            if now_date in cls['DataAula'] and now_time in cls['DataAula']:
+            if now_date in cls['DataAula'] and '20:45:00' in cls['DataAula']:
                 embed = create_embed(cls, bot)
                 await channel.send(embed=embed)
 
