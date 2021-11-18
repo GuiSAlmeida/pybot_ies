@@ -6,6 +6,11 @@ on:
   pull_request:
     branches: [ master ]
 
+env:
+  TOKEN: ${{ secrets.TOKEN }}
+  MATRICULA: ${{ secrets.MATRICULA }}
+  SENHA: ${{ secrets.SENHA }}
+
 jobs:
   build:
 
