@@ -70,11 +70,11 @@ async def current_time():
     now_time = now.strftime('%H:%M:00')
     now_date = now.strftime('%Y-%m-%d')
 
-    if '19:10:00' in now_time or '21:35:00' in now_time:
+    if '19:10:00' in now_time or '20:45:00' in now_time:
         classes = get_classes()
 
         for cls in classes:
-            if now_date in cls['DataAula'] and '20:45:00' in cls['DataAula']:
+            if now_date in cls['DataAula'] and now_time in cls['DataAula']:
                 embed = create_embed(cls, bot)
                 await channel.send(embed=embed)
 
