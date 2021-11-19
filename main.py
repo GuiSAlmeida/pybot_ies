@@ -59,7 +59,7 @@ async def send_hello(ctx):
 
 @tasks.loop(minutes=1)
 async def current_time():
-    channel = bot.get_channel(877701880472547328)
+    channel = bot.get_channel(889644549192974336)
 
     """
     Timedelta subtract 3 hours from current time
