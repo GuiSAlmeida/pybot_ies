@@ -33,5 +33,3 @@ docker run -d \
 # run test to request IES api
 docker run -it --rm --name pybot_ies guisalmeida/pybot_ies:latest python utils.py
 ```
-# testing jenkins
-testing webhook
