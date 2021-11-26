@@ -32,6 +32,9 @@ async def on_message(message):
         await message.channel.send(f'Oi {message.author.name}, olá pessoal '
                                    f'espero encontrar vocês bem!')
 
+    if 'Charles' in message.content:
+        await message.channel.send(f'Oi {message.author.name}, '
+                                   f'Charles é ótimo professor!')    
     await bot.process_commands(message)
 
 
